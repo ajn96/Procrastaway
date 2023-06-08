@@ -185,10 +185,17 @@ namespace Procrastaway
 
         private void annoyingSlowPrintLn(string line)
         {
+            int sleepTimeMs = 3;
             foreach(char c in line)
             {
                 Console.Write(c);
-                System.Threading.Thread.Sleep(1);
+                System.Threading.Thread.Sleep(sleepTimeMs);
+                if(Console.KeyAvailable)
+                {
+                    /* Okkkk fine */
+                    Console.ReadKey(true);
+                    sleepTimeMs = 0;
+                }
             }
             Console.Write(Environment.NewLine);
         }
