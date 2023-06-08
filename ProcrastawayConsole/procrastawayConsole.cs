@@ -35,16 +35,14 @@ namespace ProcrastawayConsole
         /// </summary>
         public void Start()
         {
-            /* Print out executing path */
+            /* Print out starting directory */
             Console.WriteLine("Starting operation from " + Assembly.GetEntryAssembly().Location);
-
-            /* Play starting sound */
-            SystemSounds.PlaySound(SystemSounds.Sounds.Started);
+            /* Print info on allowable time */
+            Console.WriteLine("Weekly allowable game time: " + settings.weekly_game_time_min.ToString() + " minutes");
 
             /* Configure the Procrastaway monitor */
             procCore.Instance.SetGameList(settings.game_process_list);
-            procCore.Instance.SetWeeklyGameTime(1);
-            //procCore.Instance.setWeeklyGameTime(week_game_time_hrs * 60);
+            procCore.Instance.SetWeeklyGameTime(settings.weekly_game_time_min);
 
             /* Register event handlers for sounds */
             procCore.Instance.MaxGameTimeReached += MaxGameTimeReachedHandler;
@@ -53,11 +51,14 @@ namespace ProcrastawayConsole
             /* Start the  monitor */
             procCore.Instance.Start(exePath + @"\time_log.txt");
 
+            /* Play starting sound */
+            SystemSounds.PlaySound(SystemSounds.Sounds.Started);
+
             /* Configure console options */
             int cursorStart = 0;
             if (settings.playtime_report)
             {
-                Console.Write("Weekly playtime (sec): ");
+                Console.Write("Weekly playtime: ");
                 /* Record cursor starting position so we can reset later to count timer up */
                 cursorStart = Console.CursorLeft;
                 Console.CursorVisible = false;
@@ -74,8 +75,11 @@ namespace ProcrastawayConsole
             {
                 if (settings.playtime_report)
                 {
+                    int time = procCore.Instance.GetCurrentWeeklyGameTimeSec();
+                    int timeMin = time / 60;
+                    int timeSec = time % 60;
                     Console.SetCursorPosition(cursorStart, Console.CursorTop);
-                    Console.Write(procCore.Instance.GetCurrentWeeklyGameTimeSec());
+                    Console.Write(timeMin.ToString() + " minutes " + timeSec.ToString() + " seconds");
                 }
                 System.Threading.Thread.Sleep(100);
             }
@@ -103,7 +107,7 @@ namespace ProcrastawayConsole
             AnnoyingSlowPrintLn("...");
             AnnoyingSlowPrintLn("Usage should be very simple. There is a single user_config.txt file in the directory:");
             AnnoyingSlowPrintLn(exePath);
-            AnnoyingSlowPrintLn("Edit the config file to change the allowable weekly gaming time. The default is " + settings.week_game_time_hrs + " hours.");
+            AnnoyingSlowPrintLn("Edit the config file to change the allowable weekly gaming time. The default is " + settings.weekly_game_time_min + " minutes.");
             AnnoyingSlowPrintLn("Game playtime is tracked on a rolling period lasting one week.");
             AnnoyingSlowPrintLn("To hide this window, edit the config file and disable game playtime display.");
             AnnoyingSlowPrintLn("...");

@@ -10,9 +10,9 @@ namespace Procrastaway
     public class SettingManager
     {
         /// <summary>
-        /// Amount of game time allowed each week, in hours
+        /// Amount of game time allowed each week, in minutes
         /// </summary>
-        public int week_game_time_hrs = 5;
+        public int weekly_game_time_min = 5 * 60;
 
         /// <summary>
         /// Games to track and limit
@@ -68,7 +68,7 @@ namespace Procrastaway
             {
                 contents = File.ReadAllLines(configPath);
                 /* Parse allowed time */
-                week_game_time_hrs = Convert.ToInt32(contents[1]);
+                weekly_game_time_min = Convert.ToInt32(contents[1]);
                 /* Parse playtime report setting */
                 if (!Boolean.TryParse(contents[3], out playtime_report))
                 {
@@ -101,8 +101,8 @@ namespace Procrastaway
         {
             using (StreamWriter writer = new StreamWriter(path))
             {
-                writer.WriteLine("Enter weekly gaming hours on the line below:");
-                writer.WriteLine(week_game_time_hrs.ToString());
+                writer.WriteLine("Enter weekly gaming minutes on the line below:");
+                writer.WriteLine(weekly_game_time_min.ToString());
                 writer.WriteLine("Set following line to 1 for playtime report, 0 for no report:");
                 writer.WriteLine(playtime_report.ToString());
                 writer.WriteLine("Enter game executable names (such as \"hl2.exe\" on the lines below:");
