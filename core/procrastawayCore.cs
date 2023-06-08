@@ -37,9 +37,11 @@ namespace Procrastaway.core
         /* Instance of activity monitor */
         private activityMonitor monitor;
 
-        private System.Threading.Thread gameSupervisor;
+        /* Thread which supervises gameplay and raises events */
+        private Thread gameSupervisor;
         private bool supervisorRunning;
 
+        /* Track if we have reached the gaming time limit in current instance */
         private bool threshReachedInCurrentSession = false;
 
         /// <summary>
@@ -160,6 +162,13 @@ namespace Procrastaway.core
                         GamePlayable?.Invoke(this, new EventArgs());
                     }
                 }
+
+                /* If user exits game, prevent re-opening */
+                if(!monitor.IsProcessRunning)
+                {
+                    threshReachedInCurrentSession = false;
+                }
+
                 /* Sleep for a system tick */
                 System.Threading.Thread.Sleep(TICK_PERIOD_SEC);
             }

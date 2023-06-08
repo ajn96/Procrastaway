@@ -42,11 +42,16 @@ namespace Procrastaway
         /// <summary>
         /// Report if monitor is running or not
         /// </summary>
-        public bool isRunning { get; private set; } = false;
+        public bool IsMonitorRunning { get; private set; } = false;
+
+        /// <summary>
+        /// Report if a tracked process is running or not
+        /// </summary>
+        public bool IsProcessRunning { get; private set; } = false;
 
         public void start()
         {
-            if(isRunning)
+            if(IsMonitorRunning)
             {
                 /* I could probably not do this and just return? 
                  But I think its better to tell people something bad happened.
@@ -73,7 +78,7 @@ namespace Procrastaway
             sampleTimer = new System.Timers.Timer(1000 * samplePeriod);
             sampleTimer.Elapsed += checkForRunningProcesses;
             sampleTimer.Start();
-            isRunning = true;
+            IsMonitorRunning = true;
         }
 
         public void stop()
@@ -84,19 +89,26 @@ namespace Procrastaway
 
             WriteLog();
             fifoMutex.Dispose();
-            isRunning = false;
+            IsMonitorRunning = false;
         }
 
         private void checkForRunningProcesses(Object source, ElapsedEventArgs e)
         {
+            bool found = false;
             foreach(string proc in procList)
             {
                 if(ProcessManager.IsProcessRunning(proc))
                 {
+                    found = true;
                     timeFIFO.Add(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                    IsProcessRunning = true;
                     WriteLog();
                     break;
                 }
+            }
+            if(!found)
+            {
+                IsProcessRunning = false;
             }
         }
 
