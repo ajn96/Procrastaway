@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ProcrastawayGUI
 {
-    public partial class Form1 : Form
+    public partial class ProcrastawayGUI : Form
     {
-        public Form1()
+        public ProcrastawayGUI()
         {
             InitializeComponent();
         }

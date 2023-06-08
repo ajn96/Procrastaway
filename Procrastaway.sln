@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrastaway", "Procrastawa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcrastawayConsole", "ProcrastawayConsole\ProcrastawayConsole.csproj", "{9EC40966-8F74-4C35-A777-C8A4515AA3DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcrastawayGUI", "ProcrastawayGUI\ProcrastawayGUI.csproj", "{73B41DCA-BCA1-4BF2-9E5B-8CDC5DF9D729}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9EC40966-8F74-4C35-A777-C8A4515AA3DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EC40966-8F74-4C35-A777-C8A4515AA3DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EC40966-8F74-4C35-A777-C8A4515AA3DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73B41DCA-BCA1-4BF2-9E5B-8CDC5DF9D729}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73B41DCA-BCA1-4BF2-9E5B-8CDC5DF9D729}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73B41DCA-BCA1-4BF2-9E5B-8CDC5DF9D729}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73B41DCA-BCA1-4BF2-9E5B-8CDC5DF9D729}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

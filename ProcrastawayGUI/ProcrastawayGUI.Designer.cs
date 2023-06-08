@@ -1,6 +1,6 @@
 ﻿namespace ProcrastawayGUI
 {
-    partial class Form1
+    partial class ProcrastawayGUI
     {
         /// <summary>
         /// Required designer variable.
