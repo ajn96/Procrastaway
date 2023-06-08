@@ -56,7 +56,7 @@ namespace Procrastaway
         /// <summary>
         /// Track if playtime is reported
         /// </summary>
-        private int playtime_report = 1;
+        private bool playtime_report = true;
 
         /// <summary>
         /// Track path for current executable
@@ -96,24 +96,24 @@ namespace Procrastaway
 
             /* Configure console options */
             int cursorStart = 0;
-            if(playtime_report == 0)
-            {
-                /* Wait until we are killed, so hide console */
-                Console.WindowWidth = 0;
-                Console.WindowHeight = 0;
-            }
-            else
+            if(playtime_report)
             {
                 Console.Write("Weekly playtime (sec): ");
                 /* Record cursor starting position so we can reset later to count timer up */
                 cursorStart = Console.CursorLeft;
                 Console.CursorVisible = false;
             }
+            else
+            {
+                /* Wait until we are killed, so hide console */
+                Console.WindowWidth = 1;
+                Console.WindowHeight = 1;
+            }
 
             /* Cyclic executive */
             while(true)
             {
-                if (playtime_report != 0)
+                if (playtime_report)
                 {
                     Console.SetCursorPosition(cursorStart, Console.CursorTop);
                     Console.Write(procCore.Instance.getCurrentWeeklyGameTimeSec());
@@ -131,10 +131,28 @@ namespace Procrastaway
         {
             string[] contents;
             bool goodFile = false;
+            List<string> games = new List<string>();
             
             try
             {
                 contents = File.ReadAllLines(configPath);
+                /* Parse allowed time */
+                week_game_time_hrs = Convert.ToInt32(contents[1]);
+                /* Parse playtime report setting */
+                if (!Boolean.TryParse(contents[3], out playtime_report))
+                {
+                    /* Yes I am lazy */
+                    throw new Exception();
+                }
+                /* Parse game list */
+                if (contents.Length > 5)
+                {
+                    for(int i = 5; i < contents.Length; i++)
+                    {
+                        games.Add(contents[i]);
+                    }
+                    game_process_list = games.ToArray();
+                }
                 goodFile = true;
             }
             catch

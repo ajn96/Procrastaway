@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="core\SystemSounds.cs" />
     <Compile Include="procrastawayConsole.cs" />
     <Compile Include="core\activityMonitor.cs" />
     <Compile Include="core\ProcessManager.cs" />

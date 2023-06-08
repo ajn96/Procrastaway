@@ -98,6 +98,9 @@ namespace Procrastaway.core
             gameSupervisor.Start();
         }
 
+        /// <summary>
+        /// Stop the game monitoring system.
+        /// </summary>
         public void stop()
         {
             supervisorRunning = false;
