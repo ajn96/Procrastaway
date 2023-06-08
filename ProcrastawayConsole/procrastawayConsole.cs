@@ -19,13 +19,13 @@ namespace ProcrastawayConsole
         /// </summary>
         public ProcrastawayConsole()
         {
-            exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location + @"\");
+            exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             settings = new SettingManager();
 
             /* Read in user time or game settings */
-            if (!settings.ParseUserConfig(exePath + "user_config.txt"))
+            if (!settings.ParseUserConfig(exePath + @"\user_config.txt"))
             {
-                settings.CreateDefaultConfigFile(exePath + "user_config.txt");
+                settings.CreateDefaultConfigFile(exePath + @"\user_config.txt");
                 FirstTimeSetupMessage();
             }
         }
@@ -51,7 +51,7 @@ namespace ProcrastawayConsole
             procCore.Instance.GameStopped += GameStoppedHandler;
 
             /* Start the  monitor */
-            procCore.Instance.Start(exePath + "time_log.txt");
+            procCore.Instance.Start(exePath + @"\time_log.txt");
 
             /* Configure console options */
             int cursorStart = 0;
