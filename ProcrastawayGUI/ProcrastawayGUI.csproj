@@ -80,7 +80,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Procrastaway.csproj">
+    <ProjectReference Include="..\ProcrastawayCore\Procrastaway.csproj">
       <Project>{5b9cd083-0743-446e-aa2a-67ec717e448a}</Project>
       <Name>Procrastaway</Name>
     </ProjectReference>

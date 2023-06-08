@@ -56,16 +56,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Procrastaway.csproj">
-      <Project>{5b9cd083-0743-446e-aa2a-67ec717e448a}</Project>
-      <Name>Procrastaway</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProcrastawayCore\Procrastaway.csproj">
+      <Project>{5b9cd083-0743-446e-aa2a-67ec717e448a}</Project>
+      <Name>Procrastaway</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
