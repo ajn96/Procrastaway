@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Procrastaway;
+using Procrastaway.core;
 
 namespace ProcrastawayConsole
 {
@@ -75,6 +76,9 @@ namespace ProcrastawayConsole
             /* Print out executing path */
             Console.WriteLine("Starting operation from " + exePath);
 
+            /* Play starting sound */
+            SystemSounds.PlaySound(SystemSounds.Sounds.Started);
+
             /* Read in user time or game settings */
             if (!ParseUserConfig(exePath + "user_config.txt"))
             {
@@ -116,11 +120,6 @@ namespace ProcrastawayConsole
                 }
                 System.Threading.Thread.Sleep(100);
             }
-        }
-
-        public void Stop()
-        {
-            procCore.Instance.Stop();
         }
 
         /// <summary>
@@ -184,6 +183,9 @@ namespace ProcrastawayConsole
             Console.WriteLine("Created default user config file at " + path);
         }
 
+        /// <summary>
+        /// Its the details like this that make things worth it
+        /// </summary>
         private void FirstTimeSetupMessage()
         {
             AnnoyingSlowPrintLn("Welcome to Procrastiway!");
