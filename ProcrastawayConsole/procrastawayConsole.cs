@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Procrastaway;
 
-namespace Procrastaway
+namespace ProcrastawayConsole
 {
-    using procCore = core.ProcrastawayCore;
+    using procCore = Procrastaway.core.ProcrastawayCore;
 
     public class ProcrastawayConsole
     {
