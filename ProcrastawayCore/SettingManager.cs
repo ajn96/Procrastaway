@@ -103,7 +103,7 @@ namespace Procrastaway
             {
                 writer.WriteLine("Enter weekly gaming minutes on the line below:");
                 writer.WriteLine(weekly_game_time_min.ToString());
-                writer.WriteLine("Set following line to 1 for playtime report, 0 for no report:");
+                writer.WriteLine("Set following line to True for playtime report, False for no report:");
                 writer.WriteLine(playtime_report.ToString());
                 writer.WriteLine("Enter game executable names (such as \"hl2.exe\" on the lines below:");
                 foreach (string game in game_process_list)
