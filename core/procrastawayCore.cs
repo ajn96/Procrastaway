@@ -24,6 +24,11 @@ namespace Procrastaway.core
         public event EventHandler GameTimeExceeded;
 
         /// <summary>
+        /// Event which is raised whenever a game is stopped
+        /// </summary>
+        public event EventHandler GameStopped;
+
+        /// <summary>
         /// Tick rate for the monitor. Results in worst case log of
         /// 4.614 MB for default time of 1s.
         /// </summary>
@@ -156,7 +161,10 @@ namespace Procrastaway.core
                     {
                         foreach (string proc in track_procs)
                         {
-                            ProcessManager.KillProcess(proc);
+                            if (ProcessManager.KillProcess(proc))
+                            {
+                                GameStopped?.Invoke(this, new EventArgs());
+                            }
                         }
                     }
                 }

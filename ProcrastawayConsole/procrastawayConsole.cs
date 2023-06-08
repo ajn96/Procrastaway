@@ -91,6 +91,10 @@ namespace ProcrastawayConsole
             procCore.Instance.SetWeeklyGameTime(1);
             //procCore.Instance.setWeeklyGameTime(week_game_time_hrs * 60);
 
+            /* Register event handlers for sounds */
+            procCore.Instance.MaxGameTimeReached += MaxGameTimeReachedHandler;
+            procCore.Instance.GameStopped += GameStoppedHandler;
+
             /* Start the  monitor */
             procCore.Instance.Start(exePath + "time_log.txt");
 
@@ -120,6 +124,16 @@ namespace ProcrastawayConsole
                 }
                 System.Threading.Thread.Sleep(100);
             }
+        }
+
+        private void GameStoppedHandler(object sender, EventArgs e)
+        {
+            SystemSounds.PlaySound(SystemSounds.Sounds.GameStopped);
+        }
+
+        private void MaxGameTimeReachedHandler(object sender, EventArgs e)
+        {
+            SystemSounds.PlaySound(SystemSounds.Sounds.PlaytimeReached);
         }
 
         /// <summary>
