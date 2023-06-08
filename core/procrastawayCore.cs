@@ -12,6 +12,12 @@ namespace Procrastaway.core
     /// </summary>
     public class procrastawayCore
     {
+        public event EventHandler MaxGameTimeReached;
+
+        public event EventHandler GamePlayable;
+
+        public event EventHandler GameTimeExceeded;
+
         /// <summary>
         /// Tick rate for the monitor. Results in worst case log of
         /// 4.614 MB. Default 10s tick rate results in 0.46MB worst
@@ -33,6 +39,8 @@ namespace Procrastaway.core
 
         private System.Threading.Thread gameSupervisor;
         private bool supervisorRunning;
+
+        private bool threshReachedInCurrentSession = false;
 
         /// <summary>
         /// Private constructor for singleton
@@ -114,13 +122,42 @@ namespace Procrastaway.core
         /// </summary>
         void gameSupervisorWorker()
         {
+            int lastTime, curTime;
+            lastTime = 0;
+            curTime = 0;
             while(supervisorRunning)
             {
-                if (getCurrentWeeklyGameTimeSec() >= process_time_sec)
+                lastTime = curTime;
+                curTime = getCurrentWeeklyGameTimeSec();
+                /* Are we over time? */
+                if (curTime >= process_time_sec)
                 {
-                    foreach (string proc in track_procs)
+                    if (lastTime < process_time_sec)
                     {
-                        ProcessManager.KillProcess(proc);
+                        threshReachedInCurrentSession = true;
+                        MaxGameTimeReached.Invoke(this, new EventArgs());
+                    }
+                    else
+                    {
+                        GameTimeExceeded.Invoke(this, new EventArgs());
+                    }
+
+                    /* Kill processes only if we started over time, to be generous */
+                    if(!threshReachedInCurrentSession)
+                    {
+                        foreach (string proc in track_procs)
+                        {
+                            ProcessManager.KillProcess(proc);
+                        }
+                    }
+                }
+                /* We have time! */
+                else
+                {
+                    /* Did we just come back under the limit? */
+                    if (lastTime >= process_time_sec)
+                    {
+                        GamePlayable.Invoke(this, new EventArgs());
                     }
                 }
                 /* Sleep for a system tick */
