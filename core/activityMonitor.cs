@@ -94,6 +94,7 @@ namespace Procrastaway
                 if(ProcessManager.IsProcessRunning(proc))
                 {
                     timeFIFO.Add(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                    WriteLog();
                     break;
                 }
             }
