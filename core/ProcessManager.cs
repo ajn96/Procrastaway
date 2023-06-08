@@ -60,6 +60,12 @@ namespace Procrastaway.core
             return success;
         }
 
+        /// <summary>
+        /// Helper functions to check if a game name matches a running process. Ignores case and .exe file extension.
+        /// </summary>
+        /// <param name="name">Game name, which may or may not have .exe</param>
+        /// <param name="proc">Proccess to check against</param>
+        /// <returns>True if match, false if no match</returns>
         private static bool matchProcessNames(string name, Process proc)
         {
             if (proc.ProcessName == name)

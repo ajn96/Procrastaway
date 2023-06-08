@@ -12,16 +12,24 @@ namespace Procrastaway.core
     /// </summary>
     public class procrastawayCore
     {
+        /// <summary>
+        /// Event which is raised when the maximim allowable game playtime is first reached
+        /// </summary>
         public event EventHandler MaxGameTimeReached;
 
+        /// <summary>
+        /// Event which is raised when a game is first playable again, after time was previously exceeded
+        /// </summary>
         public event EventHandler GamePlayable;
 
+        /// <summary>
+        /// Event which is raised at the tick rate of the system when the game playtime is exceeded
+        /// </summary>
         public event EventHandler GameTimeExceeded;
 
         /// <summary>
         /// Tick rate for the monitor. Results in worst case log of
-        /// 4.614 MB. Default 10s tick rate results in 0.46MB worst
-        /// case log size.
+        /// 4.614 MB for default time of 1s.
         /// </summary>
         private readonly int TICK_PERIOD_SEC = 1;
 
@@ -66,6 +74,10 @@ namespace Procrastaway.core
             }
         }
 
+        /// <summary>
+        /// Get the amount of time spent on games in the last week
+        /// </summary>
+        /// <returns>The time, in seconds</returns>
         public int getCurrentWeeklyGameTimeSec()
         {
             return monitor.getCurrentLoggedTimeSec();

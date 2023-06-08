@@ -14,15 +14,7 @@ namespace Procrastaway
         {
             /* Start the console app. Does not return. */
             procrastawayConsole procManager = new procrastawayConsole();
-            try
-            {
-                procManager.Start();
-            }
-            finally
-            {
-                procManager.stop();
-            }
-            
+            procManager.Start();
         }
     }
 }
