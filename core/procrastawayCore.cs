@@ -135,11 +135,11 @@ namespace Procrastaway.core
                     if (lastTime < process_time_sec)
                     {
                         threshReachedInCurrentSession = true;
-                        MaxGameTimeReached.Invoke(this, new EventArgs());
+                        MaxGameTimeReached?.Invoke(this, new EventArgs());
                     }
                     else
                     {
-                        GameTimeExceeded.Invoke(this, new EventArgs());
+                        GameTimeExceeded?.Invoke(this, new EventArgs());
                     }
 
                     /* Kill processes only if we started over time, to be generous */
@@ -157,7 +157,7 @@ namespace Procrastaway.core
                     /* Did we just come back under the limit? */
                     if (lastTime >= process_time_sec)
                     {
-                        GamePlayable.Invoke(this, new EventArgs());
+                        GamePlayable?.Invoke(this, new EventArgs());
                     }
                 }
                 /* Sleep for a system tick */
