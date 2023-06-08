@@ -62,7 +62,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="core\SystemSounds.cs" />
+    <Compile Include="SystemSounds.cs" />
     <Compile Include="SettingManager.cs" />
   </ItemGroup>
   <ItemGroup>
