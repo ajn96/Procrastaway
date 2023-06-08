@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Procrastaway
 {
-    using procCore = core.procrastawayCore;
+    using procCore = core.ProcrastawayCore;
 
-    public class procrastawayConsole
+    public class ProcrastawayConsole
     {
         /// <summary>
         /// Amount of game time allowed each week, in hours
@@ -50,7 +44,8 @@ namespace Procrastaway
             "far-cry-6.exe",
             "forza_horizon_5.exe",
             "halo_infinite.exe",
-            "deathloop.exe"
+            "deathloop.exe",
+            "smite.exe"
         };
 
         /// <summary>
@@ -66,7 +61,7 @@ namespace Procrastaway
         /// <summary>
         /// Private constructor to set current dir
         /// </summary>
-        public procrastawayConsole()
+        public ProcrastawayConsole()
         {
             exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location + @"\");
         }
@@ -80,23 +75,23 @@ namespace Procrastaway
             Console.WriteLine("Starting operation from " + exePath);
 
             /* Read in user time or game settings */
-            if (!parseUserConfig(exePath + "user_config.txt"))
+            if (!ParseUserConfig(exePath + "user_config.txt"))
             {
-                createDefaultConfigFile(exePath + "user_config.txt");
-                firstTimeSetupMessage();
+                CreateDefaultConfigFile(exePath + "user_config.txt");
+                FirstTimeSetupMessage();
             }
 
             /* Configure the Procrastaway monitor */
-            procCore.Instance.setGameList(game_process_list);
-            procCore.Instance.setWeeklyGameTime(1);
+            procCore.Instance.SetGameList(game_process_list);
+            procCore.Instance.SetWeeklyGameTime(1);
             //procCore.Instance.setWeeklyGameTime(week_game_time_hrs * 60);
 
             /* Start the  monitor */
-            procCore.Instance.start(exePath + "time_log.txt");
+            procCore.Instance.Start(exePath + "time_log.txt");
 
             /* Configure console options */
             int cursorStart = 0;
-            if(playtime_report)
+            if (playtime_report)
             {
                 Console.Write("Weekly playtime (sec): ");
                 /* Record cursor starting position so we can reset later to count timer up */
@@ -111,28 +106,33 @@ namespace Procrastaway
             }
 
             /* Cyclic executive */
-            while(true)
+            while (true)
             {
                 if (playtime_report)
                 {
                     Console.SetCursorPosition(cursorStart, Console.CursorTop);
-                    Console.Write(procCore.Instance.getCurrentWeeklyGameTimeSec());
+                    Console.Write(procCore.Instance.GetCurrentWeeklyGameTimeSec());
                 }
                 System.Threading.Thread.Sleep(100);
             }
         }
 
-        public void stop()
+        public void Stop()
         {
-            procCore.Instance.stop();
+            procCore.Instance.Stop();
         }
 
-        private bool parseUserConfig(string configPath)
+        /// <summary>
+        /// Try to parse user config file for all settings
+        /// </summary>
+        /// <param name="configPath">Path to the config file</param>
+        /// <returns>True is successful parse, false otherwise</returns>
+        private bool ParseUserConfig(string configPath)
         {
             string[] contents;
             bool goodFile = false;
             List<string> games = new List<string>();
-            
+
             try
             {
                 contents = File.ReadAllLines(configPath);
@@ -147,7 +147,7 @@ namespace Procrastaway
                 /* Parse game list */
                 if (contents.Length > 5)
                 {
-                    for(int i = 5; i < contents.Length; i++)
+                    for (int i = 5; i < contents.Length; i++)
                     {
                         games.Add(contents[i]);
                     }
@@ -166,7 +166,7 @@ namespace Procrastaway
         /// Write default times and game list to a file
         /// </summary>
         /// <param name="path">File to create and write to</param>
-        private void createDefaultConfigFile(string path)
+        private void CreateDefaultConfigFile(string path)
         {
             using (StreamWriter writer = new StreamWriter(path))
             {
@@ -183,32 +183,32 @@ namespace Procrastaway
             Console.WriteLine("Created default user config file at " + path);
         }
 
-        private void firstTimeSetupMessage()
+        private void FirstTimeSetupMessage()
         {
-            annoyingSlowPrintLn("Welcome to Procrastiway!");
-            annoyingSlowPrintLn("...");
-            annoyingSlowPrintLn("Thank you for using this app. I made it while I was procrastinating on a school assignment.");
-            annoyingSlowPrintLn("but I figure thats a better use of time than just playing games");
-            annoyingSlowPrintLn("...");
-            annoyingSlowPrintLn("Usage should be very simple. There is a single user_config.txt file in the directory:");
-            annoyingSlowPrintLn(exePath);
-            annoyingSlowPrintLn("Edit the config file to change the allowable weekly gaming time. The default is " + week_game_time_hrs + " hours.");
-            annoyingSlowPrintLn("Game playtime is tracked on a rolling period lasting one week.");
-            annoyingSlowPrintLn("To hide this window, edit the config file and disable game playtime display.");
-            annoyingSlowPrintLn("...");
-            annoyingSlowPrintLn("Now lets go be productive! Press enter to continue");
+            AnnoyingSlowPrintLn("Welcome to Procrastiway!");
+            AnnoyingSlowPrintLn("...");
+            AnnoyingSlowPrintLn("Thank you for using this app. I made it while I was procrastinating on a school assignment.");
+            AnnoyingSlowPrintLn("but I figure thats a better use of time than just playing games");
+            AnnoyingSlowPrintLn("...");
+            AnnoyingSlowPrintLn("Usage should be very simple. There is a single user_config.txt file in the directory:");
+            AnnoyingSlowPrintLn(exePath);
+            AnnoyingSlowPrintLn("Edit the config file to change the allowable weekly gaming time. The default is " + week_game_time_hrs + " hours.");
+            AnnoyingSlowPrintLn("Game playtime is tracked on a rolling period lasting one week.");
+            AnnoyingSlowPrintLn("To hide this window, edit the config file and disable game playtime display.");
+            AnnoyingSlowPrintLn("...");
+            AnnoyingSlowPrintLn("Now lets go be productive! Press enter to continue");
             Console.Read();
             Console.Clear();
         }
 
-        private void annoyingSlowPrintLn(string line)
+        private void AnnoyingSlowPrintLn(string line)
         {
             int sleepTimeMs = 3;
-            foreach(char c in line)
+            foreach (char c in line)
             {
                 Console.Write(c);
                 System.Threading.Thread.Sleep(sleepTimeMs);
-                if(Console.KeyAvailable)
+                if (Console.KeyAvailable)
                 {
                     /* Okkkk fine */
                     Console.ReadKey(true);

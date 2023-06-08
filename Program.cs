@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Procrastaway
+﻿namespace Procrastaway
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             /* Start the console app. Does not return. */
-            procrastawayConsole procManager = new procrastawayConsole();
+            ProcrastawayConsole procManager = new ProcrastawayConsole();
             procManager.Start();
         }
     }

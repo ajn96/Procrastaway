@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Procrastaway.core
 {
     /// <summary>
     /// Top level interface for procrastiway
     /// </summary>
-    public class procrastawayCore
+    public class ProcrastawayCore
     {
         /// <summary>
         /// Event which is raised when the maximim allowable game playtime is first reached
@@ -34,7 +30,7 @@ namespace Procrastaway.core
         private readonly int TICK_PERIOD_SEC = 1;
 
         /* Singleton instance */
-        private static procrastawayCore instance;
+        private static ProcrastawayCore instance;
 
         /* Processes to track */
         private string[] track_procs;
@@ -43,7 +39,7 @@ namespace Procrastaway.core
         private int process_time_sec;
 
         /* Instance of activity monitor */
-        private activityMonitor monitor;
+        private ActivityMonitor monitor;
 
         /* Thread which supervises gameplay and raises events */
         private Thread gameSupervisor;
@@ -55,20 +51,20 @@ namespace Procrastaway.core
         /// <summary>
         /// Private constructor for singleton
         /// </summary>
-        private procrastawayCore()
+        private ProcrastawayCore()
         {
         }
 
         /// <summary>
         /// Get the Procrastaway instance
         /// </summary>
-        public static procrastawayCore Instance
+        public static ProcrastawayCore Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new procrastawayCore();
+                    instance = new ProcrastawayCore();
                 }
                 return instance;
             }
@@ -78,16 +74,16 @@ namespace Procrastaway.core
         /// Get the amount of time spent on games in the last week
         /// </summary>
         /// <returns>The time, in seconds</returns>
-        public int getCurrentWeeklyGameTimeSec()
+        public int GetCurrentWeeklyGameTimeSec()
         {
-            return monitor.getCurrentLoggedTimeSec();
+            return monitor.GetCurrentLoggedTimeSec();
         }
 
         /// <summary>
         /// Set list of games to track and block
         /// </summary>
         /// <param name="gameList">Array of game process names</param>
-        public void setGameList(string[] gameList)
+        public void SetGameList(string[] gameList)
         {
             track_procs = gameList;
         }
@@ -97,7 +93,7 @@ namespace Procrastaway.core
         /// time has elapsed will be blocked.
         /// </summary>
         /// <param name="timeHrs"></param>
-        public void setWeeklyGameTime(int timeMins)
+        public void SetWeeklyGameTime(int timeMins)
         {
             if (timeMins < 1)
                 throw new ArgumentException("Minimum game time of 1 min...");
@@ -108,25 +104,25 @@ namespace Procrastaway.core
         /// <summary>
         /// Start monitoring for games. Runs async
         /// </summary>
-        public void start(string logDir)
+        public void Start(string logDir)
         {
             /* Monitor tracks game time */
-            monitor = new activityMonitor(logDir, track_procs, TICK_PERIOD_SEC);
-            monitor.start();
+            monitor = new ActivityMonitor(logDir, track_procs, TICK_PERIOD_SEC);
+            monitor.Start();
 
             /* Supervisor kills game processes if the total playtime has been exceeded */
             supervisorRunning = true;
-            gameSupervisor = new System.Threading.Thread(new ThreadStart(gameSupervisorWorker));
+            gameSupervisor = new System.Threading.Thread(new ThreadStart(GameSupervisorWorker));
             gameSupervisor.Start();
         }
 
         /// <summary>
         /// Stop the game monitoring system.
         /// </summary>
-        public void stop()
+        public void Stop()
         {
             supervisorRunning = false;
-            monitor.stop();
+            monitor.Stop();
         }
 
         /// <summary>
@@ -134,15 +130,14 @@ namespace Procrastaway.core
         /// been exceeded, and if so, kills all eligible processes. This prevents the user from starting
         /// a game once the weekly time has been exceeded.
         /// </summary>
-        void gameSupervisorWorker()
+        void GameSupervisorWorker()
         {
             int lastTime, curTime;
-            lastTime = 0;
             curTime = 0;
-            while(supervisorRunning)
+            while (supervisorRunning)
             {
                 lastTime = curTime;
-                curTime = getCurrentWeeklyGameTimeSec();
+                curTime = GetCurrentWeeklyGameTimeSec();
                 /* Are we over time? */
                 if (curTime >= process_time_sec)
                 {
@@ -157,7 +152,7 @@ namespace Procrastaway.core
                     }
 
                     /* Kill processes only if we started over time, to be generous */
-                    if(!threshReachedInCurrentSession)
+                    if (!threshReachedInCurrentSession)
                     {
                         foreach (string proc in track_procs)
                         {
@@ -176,7 +171,7 @@ namespace Procrastaway.core
                 }
 
                 /* If user exits game, prevent re-opening */
-                if(!monitor.IsProcessRunning)
+                if (!monitor.IsProcessRunning)
                 {
                     threshReachedInCurrentSession = false;
                 }

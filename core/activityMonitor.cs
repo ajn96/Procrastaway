@@ -9,7 +9,7 @@ using Timer = System.Timers.Timer;
 
 namespace Procrastaway
 {
-    class activityMonitor
+    class ActivityMonitor
     {
         private string logPath;
         private string[] procList;
@@ -22,19 +22,19 @@ namespace Procrastaway
         /// Create a new activity monitor from the specified log file
         /// </summary>
         /// <param name="logFile">File containing the playtime FIFO</param>
-        public activityMonitor(string logFilePath, string [] procs, int update_period_sec)
+        public ActivityMonitor(string logFilePath, string[] procs, int updatePeriodSec)
         {
             logPath = logFilePath;
             procList = procs;
-            if (update_period_sec < 1)
+            if (updatePeriodSec < 1)
                 throw new ArgumentException("Invalid update rate for the process monitor");
-            samplePeriod = update_period_sec;
+            samplePeriod = updatePeriodSec;
             fifoMutex = new Mutex();
         }
 
-        ~activityMonitor()
+        ~ActivityMonitor()
         {
-            stop();
+            Stop();
         }
 
         /// <summary>
@@ -47,9 +47,9 @@ namespace Procrastaway
         /// </summary>
         public bool IsProcessRunning { get; private set; } = false;
 
-        public void start()
+        public void Start()
         {
-            if(IsMonitorRunning)
+            if (IsMonitorRunning)
             {
                 /* I could probably not do this and just return? 
                  But I think its better to tell people something bad happened.
@@ -74,12 +74,12 @@ namespace Procrastaway
             }
 
             sampleTimer = new System.Timers.Timer(1000 * samplePeriod);
-            sampleTimer.Elapsed += checkForRunningProcesses;
+            sampleTimer.Elapsed += CheckForRunningProcesses;
             sampleTimer.Start();
             IsMonitorRunning = true;
         }
 
-        public void stop()
+        public void Stop()
         {
             fifoMutex.WaitOne();
             sampleTimer.Stop();
@@ -90,12 +90,12 @@ namespace Procrastaway
             IsMonitorRunning = false;
         }
 
-        private void checkForRunningProcesses(Object source, ElapsedEventArgs e)
+        private void CheckForRunningProcesses(Object source, ElapsedEventArgs e)
         {
             bool found = false;
-            foreach(string proc in procList)
+            foreach (string proc in procList)
             {
-                if(ProcessManager.IsProcessRunning(proc))
+                if (ProcessManager.IsProcessRunning(proc))
                 {
                     found = true;
                     timeFIFO.Add(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
@@ -104,7 +104,7 @@ namespace Procrastaway
                     break;
                 }
             }
-            if(!found)
+            if (!found)
             {
                 IsProcessRunning = false;
             }
@@ -129,7 +129,7 @@ namespace Procrastaway
         /// Calculate how much time has been reported into the time FIFO.
         /// </summary>
         /// <returns>The total process time in the time FIFO, in seconds</returns>
-        public int getCurrentLoggedTimeSec()
+        public int GetCurrentLoggedTimeSec()
         {
             /* Lock the time fifo */
             fifoMutex.WaitOne();
@@ -138,9 +138,9 @@ namespace Procrastaway
             long startTime = curTime - (7 * 24 * 60 * 60);
             /* Remove all items from time FIFO which are older */
             List<long> newFIFO = new List<long>();
-            foreach(long time in timeFIFO)
+            foreach (long time in timeFIFO)
             {
-                if(time > startTime)
+                if (time > startTime)
                 {
                     newFIFO.Add(time);
                 }

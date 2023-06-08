@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Procrastaway.core
 {
@@ -22,7 +18,7 @@ namespace Procrastaway.core
             Process[] proclist = Process.GetProcesses();
             foreach (Process proc in proclist)
             {
-                if(matchProcessNames(processName, proc))
+                if (MatchProcessNames(processName, proc))
                 {
                     return true;
                 }
@@ -44,7 +40,7 @@ namespace Procrastaway.core
             {
                 foreach (Process proc in procList)
                 {
-                    if (matchProcessNames(processName, proc))
+                    if (MatchProcessNames(processName, proc))
                     {
                         proc.CloseMainWindow();
                         proc.Kill();
@@ -66,7 +62,7 @@ namespace Procrastaway.core
         /// <param name="name">Game name, which may or may not have .exe</param>
         /// <param name="proc">Proccess to check against</param>
         /// <returns>True if match, false if no match</returns>
-        private static bool matchProcessNames(string name, Process proc)
+        private static bool MatchProcessNames(string name, Process proc)
         {
             if (proc.ProcessName == name)
             {
