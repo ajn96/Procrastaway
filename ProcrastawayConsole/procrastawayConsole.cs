@@ -49,7 +49,7 @@ namespace ProcrastawayConsole
             procCore.Instance.GameStopped += GameStoppedHandler;
 
             /* Start the  monitor */
-            procCore.Instance.Start(exePath + @"\time_log.txt");
+            procCore.Instance.Start();
 
             /* Play starting sound */
             SystemSounds.PlaySound(SystemSounds.Sounds.Started);

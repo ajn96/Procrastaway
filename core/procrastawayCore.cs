@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 
 namespace Procrastaway.core
@@ -109,8 +111,10 @@ namespace Procrastaway.core
         /// <summary>
         /// Start monitoring for games. Runs async
         /// </summary>
-        public void Start(string logDir)
+        public void Start()
         {
+            string logDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            logDir += @"\time_log.txt";
             /* Monitor tracks game time */
             monitor = new ActivityMonitor(logDir, track_procs, TICK_PERIOD_SEC);
             monitor.Start();
