@@ -25,8 +25,8 @@ namespace Procrastaway.core
         /* Processes to track */
         private string[] track_procs;
 
-        /* Allowed process time (minutes) */
-        private int process_time_min;
+        /* Allowed process time (seconds) */
+        private int process_time_sec;
 
         /* Instance of activity monitor */
         private activityMonitor monitor;
@@ -79,7 +79,8 @@ namespace Procrastaway.core
         {
             if (timeMins < 1)
                 throw new ArgumentException("Minimum game time of 1 min...");
-            process_time_min = timeMins;
+            /* Work internally in seconds */
+            process_time_sec = timeMins * 60;
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace Procrastaway.core
         {
             while(supervisorRunning)
             {
-                if ((getCurrentWeeklyGameTimeSec() / 60) >= process_time_min)
+                if (getCurrentWeeklyGameTimeSec() >= process_time_sec)
                 {
                     foreach (string proc in track_procs)
                     {
